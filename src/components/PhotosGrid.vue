@@ -53,5 +53,10 @@ export default {
   margin-top: -4px;
   font-family: "Montserrat";
   font-weight: 300;
+  a {
+    color: #42b983;
+    text-decoration: none;
+    font-weight: 500;
+  }
 }
 </style>
