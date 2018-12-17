@@ -1,7 +1,14 @@
 <template>
   <div class="images-grid">
-    <div v-for="(item, index) in items" :key="index">
-      <img :src="item.urls.raw" alt>
+    <div class="item" v-for="(item, index) in items" :key="index">
+      <a :href="item.urls.raw" target="_blank">
+        <img :src="item.urls.raw">
+      </a>
+      <p class="info">
+        Autor:
+        <a :href="item.user.links.html" target="_blank">{{item.user.name}}</a>
+        likes: {{item.likes}} ♥️
+      </p>
     </div>
   </div>
 </template>
@@ -18,7 +25,7 @@ export default {
   created() {
     axios
       .get(
-        "https://api.unsplash.com/photos/?client_id=13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d"
+        "https://api.unsplash.com/photos/?client_id=13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d&per_page=21"
       )
       .then(response => {
         this.items = response.data;
@@ -31,13 +38,20 @@ export default {
 </script>
 <style lang="scss">
 .images-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto;
-  gap: 15px;
   margin-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
-img {
+.item img {
   width: 100%;
+}
+.info {
+  background: rgb(228, 228, 228);
+  margin-top: -4px;
+  font-family: "Montserrat";
+  font-weight: 300;
 }
 </style>
