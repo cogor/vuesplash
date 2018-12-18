@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="header" v-bind:style="{ 'background-image': 'url(' + image + ')' }">
     <div class="inform">
       <h1>
         <span>Vue</span>Splash
@@ -12,14 +12,26 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: "Header",
   data: function() {
     return {
       inputValue: "",
-      image:
-        "https://images.unsplash.com/photo-1544579880-df63ebd166c7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+      image: ""
     };
+  },
+  created() {
+    axios
+      .get(
+        "https://api.unsplash.com/photos/random?client_id=13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d"
+      )
+      .then(response => {
+        this.image = response.data.urls.regular;
+      })
+      .catch(e => {
+        this.erorrs.push(e);
+      });
   }
 };
 </script>
@@ -30,32 +42,32 @@ export default {
   justify-items: start;
   justify-content: center;
   align-items: flex-start;
-  background-image: url("../assets/bg-sr.jpg");
   background-position: center center;
   background-size: cover;
-}
-h1 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  text-align: left;
-  text-align-last: left;
-  span {
-    color: #42b983;
+  h1 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: left;
+    text-align-last: left;
+    span {
+      color: #42b983;
+    }
+    color: #fff;
+    font-family: "Ubuntu";
+    font-weight: bold;
+    font-size: 32px;
   }
-  color: #fff;
-  font-family: "Ubuntu";
-  font-weight: bold;
-  font-size: 32px;
+  p {
+    text-align: left;
+    color: #fff;
+    font-family: "Ubuntu";
+    font-weight: 500;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
 }
-p {
-  text-align: left;
-  color: #fff;
-  font-family: "Ubuntu";
-  font-weight: 500;
-  font-size: 18px;
-  margin-top: 0;
-  margin-bottom: 10px;
-}
+
 input {
   width: 50vw;
   border-radius: 5px;

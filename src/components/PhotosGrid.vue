@@ -47,13 +47,6 @@ export default {
   padding-left: 50px;
   padding-right: 50px;
 }
-// .item img {
-//   width: 100%;
-// }
-// .item {
-//   width: 33.3%;
-//   display: inline-block;
-// }
 img {
   height: 100%;
   width: 100%;
@@ -67,6 +60,9 @@ img {
     color: #42b983;
     text-decoration: none;
     font-weight: 500;
+  }
+  p {
+    color: #393939;
   }
 }
 </style>
