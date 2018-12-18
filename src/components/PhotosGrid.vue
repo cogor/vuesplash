@@ -1,19 +1,24 @@
 <template>
   <div class="images-grid">
-    <div class="item" v-for="(item, index) in items" :key="index">
-      <a :href="item.urls.raw" target="_blank">
-        <img :src="item.urls.raw">
-      </a>
-      <p class="info">
-        Autor:
-        <a :href="item.user.links.html" target="_blank">{{item.user.name}}</a>
-        likes: {{item.likes}} ♥️
-      </p>
-    </div>
+    <masonry :cols="3" :gutter="10">
+      <div class="item" v-for="(item, index) in items" :key="index">
+        <a :href="item.urls.raw" target="_blank">
+          <img :src="item.urls.regular">
+        </a>
+        <p class="info">
+          Autor:
+          <a :href="item.user.links.html" target="_blank">{{item.user.name}}</a>
+          likes: {{item.likes}} ♥️
+        </p>
+      </div>
+    </masonry>
   </div>
 </template>
 <script>
+import Vue from "vue";
 import axios from "axios";
+import VueMasonry from "vue-masonry-css";
+Vue.use(VueMasonry);
 export default {
   name: "PhotosGrid",
   data: function() {
@@ -39,13 +44,18 @@ export default {
 <style lang="scss">
 .images-grid {
   margin-top: 15px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
   padding-left: 50px;
   padding-right: 50px;
 }
-.item img {
+// .item img {
+//   width: 100%;
+// }
+// .item {
+//   width: 33.3%;
+//   display: inline-block;
+// }
+img {
+  height: 100%;
   width: 100%;
 }
 .info {
