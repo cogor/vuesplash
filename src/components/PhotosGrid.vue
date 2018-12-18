@@ -12,6 +12,7 @@
         </p>
       </div>
     </masonry>
+    <button class="load" @click="loadMore">Load more</button>
   </div>
 </template>
 <script>
@@ -24,14 +25,37 @@ export default {
   data: function() {
     return {
       items: [],
-      erorrs: []
+      erorrs: [],
+      count: 1
     };
+  },
+  methods: {
+    loadMore: function() {
+      this.count++;
+      axios
+        .get("https://api.unsplash.com/photos", {
+          params: {
+            client_id:
+              "13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d",
+            page: this.count
+          }
+        })
+        .then(response => {
+          this.items = this.items.concat(response.data);
+        })
+        .catch(e => {
+          this.erorrs.push(e);
+        });
+    }
   },
   created() {
     axios
-      .get(
-        "https://api.unsplash.com/photos/?client_id=13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d&per_page=21"
-      )
+      .get("https://api.unsplash.com/photos", {
+        params: {
+          client_id:
+            "13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d"
+        }
+      })
       .then(response => {
         this.items = response.data;
       })
@@ -42,6 +66,17 @@ export default {
 };
 </script>
 <style lang="scss">
+.load {
+  border: 1px solid #42b983;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 24px;
+  margin-bottom: 10px;
+  background: #fff;
+  color: #42b983;
+  cursor: pointer;
+  outline: none;
+}
 .images-grid {
   margin-top: 15px;
   padding-left: 50px;
