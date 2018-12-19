@@ -11,22 +11,25 @@
           likes: {{item.likes}} ♥️
         </p>
       </div>
+
+      <infinite-loading @infinite="infiniteHandler"></infinite-loading>
     </masonry>
-    <button class="load" @click="loadMore">Load more</button>
   </div>
 </template>
 <script>
 import Vue from "vue";
 import axios from "axios";
 import VueMasonry from "vue-masonry-css";
+import InfiniteLoading from "vue-infinite-loading";
 Vue.use(VueMasonry);
+Vue.use(InfiniteLoading);
 export default {
   name: "PhotosGrid",
   data: function() {
     return {
       items: [],
       erorrs: [],
-      count: 1
+      page: 1
     };
   },
   methods: {
@@ -36,8 +39,8 @@ export default {
         .get("https://api.unsplash.com/photos", {
           params: {
             client_id:
-              "13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d",
-            page: this.count
+              "d902e77395c5914d7afe282dfdf4779d3435686cfc4fc98baa9eaa1dfb18d8fd",
+            page: this.page
           }
         })
         .then(response => {
@@ -46,6 +49,21 @@ export default {
         .catch(e => {
           this.erorrs.push(e);
         });
+    },
+    infiniteHandler($state) {
+      axios
+        .get("https://api.unsplash.com/photos", {
+          params: {
+            client_id:
+              "17143180d187328ba40710420aab0502eaf5393211e1f7666edf0a258b7c88fc",
+            page: this.page
+          }
+        })
+        .then(response => {
+          this.page += 1;
+          this.items = this.items.concat(response.data);
+          $state.loaded();
+        });
     }
   },
   created() {
@@ -53,7 +71,7 @@ export default {
       .get("https://api.unsplash.com/photos", {
         params: {
           client_id:
-            "13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d"
+            "17143180d187328ba40710420aab0502eaf5393211e1f7666edf0a258b7c88fc"
         }
       })
       .then(response => {

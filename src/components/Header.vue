@@ -19,9 +19,7 @@ export default {
     return {
       inputValue: "",
       image: "",
-      page: "1",
-      client_id:
-        "client_id=13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d"
+      page: "1"
     };
   },
   created() {
@@ -29,7 +27,7 @@ export default {
       .get("https://api.unsplash.com/photos/random", {
         params: {
           client_id:
-            "13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d"
+            "17143180d187328ba40710420aab0502eaf5393211e1f7666edf0a258b7c88fc"
         }
       })
       .then(response => {

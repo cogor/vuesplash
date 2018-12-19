@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "vue": "^2.5.17",
+    "vue-infinite-loading": "^2.4.3",
     "vue-masonry": "^0.11.7",
     "vue-masonry-css": "^1.0.3",
     "vue-router": "^3.0.1",
