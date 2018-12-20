@@ -1,15 +1,9 @@
 <template>
   <div class="images-grid">
     <masonry :cols="3" :gutter="10">
-      <div
-        class="item"
-        v-for="(item, index) in items"
-        :key="index"
-        @mouseover="showInfo = true"
-        @mouseleave="showInfo = false"
-      >
+      <div class="item" v-for="(item, index) in items" :key="index">
         <img :src="item.urls.regular">
-        <div class="likes" v-show="showInfo">
+        <div class="likes">
           <svg
             version="1.1"
             id="heart"
@@ -121,6 +115,28 @@ export default {
 }
 .item {
   position: relative;
+  .info {
+    background: rgb(228, 228, 228);
+    margin-top: -4px;
+    font-family: "Montserrat";
+    font-weight: 300;
+    a {
+      color: #42b983;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    p {
+      color: #393939;
+    }
+  }
+  .likes {
+    visibility: hidden;
+  }
+  &:hover {
+    .likes {
+      visibility: visible;
+    }
+  }
 }
 .likes {
   display: flex;
@@ -147,19 +163,5 @@ img {
   width: 18px;
   padding-right: 3px;
   margin-top: -2px;
-}
-.info {
-  background: rgb(228, 228, 228);
-  margin-top: -4px;
-  font-family: "Montserrat";
-  font-weight: 300;
-  a {
-    color: #42b983;
-    text-decoration: none;
-    font-weight: 500;
-  }
-  p {
-    color: #393939;
-  }
 }
 </style>
