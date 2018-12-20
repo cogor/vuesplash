@@ -1,48 +1,65 @@
 <template>
-  <div class="images-grid">
-    <masonry :cols="3" :gutter="10">
-      <div class="item" v-for="(item, index) in items" :key="index">
-        <img :src="item.urls.regular">
-        <div class="likes">
-          <svg
-            version="1.1"
-            id="heart"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            x="0px"
-            y="0px"
-            viewBox="0 0 50 50"
-            style="enable-background:new 0 0 50 50;"
-            xml:space="preserve"
-          >
-            <path
-              style="fill:#D75A4A;"
-              d="M24.85,10.126c2.018-4.783,6.628-8.125,11.99-8.125c7.223,0,12.425,6.179,13.079,13.543
-	c0,0,0.353,1.828-0.424,5.119c-1.058,4.482-3.545,8.464-6.898,11.503L24.85,48L7.402,32.165c-3.353-3.038-5.84-7.021-6.898-11.503
-	c-0.777-3.291-0.424-5.119-0.424-5.119C0.734,8.179,5.936,2,13.159,2C18.522,2,22.832,5.343,24.85,10.126z"
-            ></path>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-            <g></g>
-          </svg>
-          {{item.likes}}
-        </div>
+  <div>
+    <div class="header" v-bind:style="{ 'background-image': 'url(' + image + ')' }">
+      <div class="inform">
+        <h1>
+          <span>Vue</span>Splash
+        </h1>
+        <p>Beautiful, free photos.
+          <br>Gifted by the world’s most generous community of photographers. 🎁
+        </p>
       </div>
+      <input
+        type="text"
+        v-model="query"
+        @keyup.enter="search"
+        placeholder="Search free high-resolution photos"
+      >
+    </div>
+    <div class="images-grid" v-show="newest">
+      <masonry :cols="3" :gutter="10">
+        <div class="item" v-for="(item, index) in items" :key="index">
+          <img :src="item.urls.regular">
+          <div class="likes">
+            <img src="../assets/like.svg" alt>
+            {{item.likes}}
+          </div>
+          <div class="autor-info">
+            <a :href="item.user.links.html">
+              <img class="autor-img" target="_blank" :src="item.user.profile_image.medium" alt>
+            </a>
+            <span>
+              <a :href="item.user.links.html" target="_blank">{{item.user.name}}</a>
+            </span>
+          </div>
+        </div>
 
-      <infinite-loading @infinite="infiniteHandler"></infinite-loading>
-    </masonry>
+        <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+      </masonry>
+    </div>
+    <div class="search-grid" v-show="searching">
+      <masonry :cols="3" :gutter="10">
+        <div class="item" v-for="(item, index) in search_items" :key="index">
+          <img :src="item.urls.regular">
+          <div class="likes">
+            <img src="../assets/like.svg" alt>
+            {{item.likes}}
+          </div>
+          <div class="autor-info">
+            <a :href="item.user.links.html">
+              <img class="autor-img" target="_blank" :src="item.user.profile_image.medium" alt>
+            </a>
+            <span>
+              <a :href="item.user.links.html" target="_blank">{{item.user.name}}</a>
+            </span>
+          </div>
+        </div>
+        <!-- <infinite-loading @infinite="infiniteSearch"></infinite-loading> -->
+      </masonry>
+      <p
+        class="notice"
+      >Infinite load does not work due to limitations of the Unsplash API demo mode 😭</p>
+    </div>
   </div>
 </template>
 <script>
@@ -59,7 +76,11 @@ export default {
       items: [],
       erorrs: [],
       page: 2,
-      showInfo: false
+      query: "",
+      image: "",
+      search_items: [],
+      newest: true,
+      searching: false
     };
   },
   methods: {
@@ -77,6 +98,42 @@ export default {
           this.items = this.items.concat(response.data);
           $state.loaded();
         });
+    },
+    infiniteSearch($state) {
+      axios
+        .get("https://api.unsplash.com/search/photos", {
+          params: {
+            client_id:
+              "13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d",
+            query: this.query,
+            page: this.page
+          }
+        })
+        .then(response => {
+          this.page += 1;
+          this.search_items = this.search_items.concat(response.data);
+          $state.loaded();
+        });
+    },
+    search() {
+      this.searching = true;
+      this.newest = false;
+      console.log("Search started");
+      axios
+        .get("https://api.unsplash.com/search/photos", {
+          params: {
+            client_id:
+              "13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d",
+            query: this.query,
+            page: this.page
+          }
+        })
+        .then(response => {
+          this.search_items = response.data.results;
+        })
+        .catch(e => {
+          this.erorrs.push(e);
+        });
     }
   },
   created() {
@@ -84,7 +141,7 @@ export default {
       .get("https://api.unsplash.com/photos", {
         params: {
           client_id:
-            "17143180d187328ba40710420aab0502eaf5393211e1f7666edf0a258b7c88fc"
+            "13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d"
         }
       })
       .then(response => {
@@ -92,7 +149,20 @@ export default {
       })
       .catch(e => {
         this.erorrs.push(e);
-      });
+      }),
+      axios
+        .get("https://api.unsplash.com/photos/random", {
+          params: {
+            client_id:
+              "13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d"
+          }
+        })
+        .then(response => {
+          this.image = response.data.urls.regular;
+        })
+        .catch(e => {
+          this.erorrs.push(e);
+        });
   }
 };
 </script>
@@ -113,8 +183,25 @@ export default {
   padding-left: 50px;
   padding-right: 50px;
 }
+.search-grid {
+  margin-top: 15px;
+  padding-left: 50px;
+  padding-right: 50px;
+  .notice {
+    font-size: 18px;
+    font-family: "Montserrat";
+    font-weight: 300;
+    text-align: center;
+  }
+}
 .item {
   position: relative;
+  &:hover {
+    img {
+      filter: brightness(80%);
+    }
+  }
+  margin-bottom: 15px;
   .info {
     background: rgb(228, 228, 228);
     margin-top: -4px;
@@ -136,6 +223,35 @@ export default {
     .likes {
       visibility: visible;
     }
+    .autor-info {
+      visibility: visible;
+    }
+  }
+  .autor-info {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    visibility: hidden;
+    display: flex;
+    justify-items: start;
+    align-items: center;
+    img {
+      height: 45px;
+      width: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    a {
+      color: #fff;
+      font-family: "Montserrat";
+      font-size: 20px;
+      line-height: 18px;
+      font-weight: 300;
+      text-decoration: none;
+    }
+    span {
+      margin-left: 15px;
+    }
   }
 }
 .likes {
@@ -152,16 +268,16 @@ export default {
   font-weight: 300;
   font-family: "Montserrat";
   cursor: pointer;
+  img {
+    height: 18px;
+    width: 18px;
+    padding-right: 3px;
+    margin-top: -2px;
+  }
 }
 img {
   height: 100%;
   width: 100%;
   cursor: zoom-in;
-}
-#heart {
-  height: 18px;
-  width: 18px;
-  padding-right: 3px;
-  margin-top: -2px;
 }
 </style>

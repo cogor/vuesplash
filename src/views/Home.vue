@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <Panel/>
-    <Header/>
     <PhotosGrid/>
   </div>
 </template>
