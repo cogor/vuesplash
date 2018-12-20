@@ -19,7 +19,7 @@ export default {
     return {
       inputValue: "",
       image: "",
-      page: "1"
+      page: 1
     };
   },
   created() {
