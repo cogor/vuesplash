@@ -19,7 +19,7 @@
     <div class="images-grid" v-show="newest">
       <masonry :cols="3" :gutter="10">
         <div class="item" v-for="(item, index) in items" :key="index">
-          <img :src="item.urls.regular">
+          <progressive-img :src="item.urls.regular"/>
           <div class="likes">
             <img src="../assets/like.svg" alt>
             {{item.likes}}
@@ -38,6 +38,9 @@
       </masonry>
     </div>
     <div class="search-grid" v-show="searching">
+      <p
+        class="notice"
+      >Infinite load does not work due to limitations of the Unsplash API demo mode 😭</p>
       <masonry :cols="3" :gutter="10">
         <div class="item" v-for="(item, index) in search_items" :key="index">
           <img :src="item.urls.regular">
@@ -54,11 +57,7 @@
             </span>
           </div>
         </div>
-        <!-- <infinite-loading @infinite="infiniteSearch"></infinite-loading> -->
       </masonry>
-      <p
-        class="notice"
-      >Infinite load does not work due to limitations of the Unsplash API demo mode 😭</p>
     </div>
   </div>
 </template>
@@ -67,6 +66,8 @@ import Vue from "vue";
 import axios from "axios";
 import VueMasonry from "vue-masonry-css";
 import InfiniteLoading from "vue-infinite-loading";
+import VueProgressiveImage from "vue-progressive-image";
+Vue.use(VueProgressiveImage);
 Vue.use(VueMasonry);
 Vue.use(InfiniteLoading);
 export default {
@@ -89,7 +90,7 @@ export default {
         .get("https://api.unsplash.com/photos", {
           params: {
             client_id:
-              "17143180d187328ba40710420aab0502eaf5393211e1f7666edf0a258b7c88fc",
+              "13ab8e477065cb9a6df56f89ad91cc9481238d694f26054c62acd40cb2f5fe3d",
             page: this.page
           }
         })
@@ -207,6 +208,7 @@ export default {
     margin-top: -4px;
     font-family: "Montserrat";
     font-weight: 300;
+    z-index: 99;
     a {
       color: #42b983;
       text-decoration: none;
@@ -221,9 +223,11 @@ export default {
   }
   &:hover {
     .likes {
+      z-index: 99;
       visibility: visible;
     }
     .autor-info {
+      z-index: 99;
       visibility: visible;
     }
   }

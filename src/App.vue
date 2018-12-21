@@ -31,6 +31,7 @@ body {
   }
 }
 .badge {
+  z-index: 999;
   position: fixed;
   padding-top: 5px;
   padding-bottom: 5px;

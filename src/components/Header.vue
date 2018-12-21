@@ -41,7 +41,7 @@ export default {
 </script>
 <style lang="scss">
 .header {
-  height: 35vh;
+  height: 65vh;
   display: grid;
   justify-items: start;
   justify-content: center;
