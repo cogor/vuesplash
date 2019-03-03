@@ -1,5 +1,7 @@
 # vuesplash
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/cogor/vuesplash.svg)](https://greenkeeper.io/)
+
 ## Project setup
 ```
 npm install
