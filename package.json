@@ -11,7 +11,7 @@
     "axios": "0.18.1",
     "vue": "2.6.11",
     "vue-infinite-loading": "2.4.5",
-    "vue-masonry": "0.11.8",
+    "vue-masonry": "0.13.0",
     "vue-masonry-css": "1.0.3",
     "vue-progressive-image": "3.2.0",
     "vue-router": "3.3.4",
